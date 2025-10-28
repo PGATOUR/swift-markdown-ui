@@ -51,6 +51,8 @@ private struct AttributedStringInlineRenderer {
       self.renderCode(content)
     case .html(let content):
       self.renderHTML(content)
+    case .underline(let children):
+      self.renderUnderline(children: children)
     case .emphasis(let children):
       self.renderEmphasis(children: children)
     case .strong(let children):
@@ -120,6 +122,17 @@ private struct AttributedStringInlineRenderer {
   private mutating func renderStrong(children: [InlineNode]) {
     let savedAttributes = self.attributes
     self.attributes = self.textStyles.strong.mergingAttributes(self.attributes)
+
+    for child in children {
+      self.render(child)
+    }
+
+    self.attributes = savedAttributes
+  }
+
+  private mutating func renderUnderline(children: [InlineNode]) {
+    let savedAttributes = self.attributes
+    self.attributes = self.textStyles.underline.mergingAttributes(self.attributes)
 
     for child in children {
       self.render(child)
